@@ -81,7 +81,7 @@ detect_interface() {
     local valid_prefixes="eno|eth|enp|wlo|wlan"
     local cache_file="$cache_dir/interface"
 
-    # Check cache (valid for 1 day)
+    # Check cache (valid for 1 day).
     if [[ -f "$cache_file" && $(find "$cache_file" -mtime -1) ]]; then
         interface=$(<"$cache_file")
         return
@@ -456,7 +456,7 @@ flush_ruleset_handler() {
 
 apply_sysctl() {
     local src="$script_dir/sysctl.conf"
-    local dst="/etc/sysctl.d/99-yuki.conf"
+    local dst="/etc/sysctl.d/90-yuki.conf"
     local hash_file="$cache_dir/.sysctl.hash"
 
     [[ ! -f "$src" ]] && print_error "Missing sysctl file: $src" && exit 1
