@@ -1,23 +1,24 @@
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/96b9d177-fe29-41f4-8a6e-7731d5696409"
+  <img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/ec419623-4575-4fe9-aa19-a7363201155b"
        alt="banner"
-       style="width: 7%; height: auto;" />
-    <h1> yuki-antiddos</h1>
+       style="width: 8%; height: auto;" />
+    <h1>yuki-antiddos</h1>
 </div>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Backend-nftables-red?style=for-the-badge" alt="Backend: nftables"/>
-  <img src="https://img.shields.io/badge/License-MIT-blueviolet?style=for-the-badge" alt="License: MIT"/>
-  <img src="https://img.shields.io/badge/Protection-L3--L4-critical?style=for-the-badge&logo=linux" alt="Protection Level: L3-L4"/>
-  <img src="https://img.shields.io/badge/Ubuntu-24.04%2B-orange?style=for-the-badge&logo=ubuntu" alt="OS: Ubuntu 24.04+"/>
+<img src="https://img.shields.io/badge/Backend-nftables-0f172a?style=for-the-badge&labelColor=020617" />
+<img src="https://img.shields.io/badge/Protection-L3--L4-0f172a?style=for-the-badge&labelColor=020617" />
+<img src="https://img.shields.io/badge/Filtering-STATEFUL-0f172a?style=for-the-badge&labelColor=020617" />
+<img src="https://img.shields.io/badge/Layer-KERNEL--LEVEL-0f172a?style=for-the-badge&labelColor=020617" />
+<img src="https://img.shields.io/badge/License-AGPL--3.0-0f172a?style=for-the-badge&labelColor=020617" />
 </p>
 
 ## ❔ What this is?
-yuki-antiddos is a simple project aimed at mitigating most of the L3-L4 attacks by using just nftables and kernel tweaks. It's made for servers, desktops (what if you need more security in public networks for your Linux laptop?), and routers (additional configuration needed in this case). It's capable of filtering even the most sophisticated attacks at the same time leaving your legitimate traffic untouched and not impacting the overall performance and CPU load. To know how is this possible, continue reading.
+yuki-antiddos is a simple project aimed at mitigating most of the L3-L4 attacks by using just nftables and kernel tweaks. It's made for servers, desktops, laptops (what if you need more security in public networks for your lappy?), and routers (additional configuration is needed in this case, although it should be simple and all you'd need is to add the required rules inside the 20-user.nft file). It's capable of filtering even the most sophisticated attacks at the same time leaving your legitimate traffic untouched and not impacting the overall performance and CPU load. To know how is this possible, continue reading.
 
 ## ⏩ **Optimization**
 Most of the ruleset makers forget about optimization; We don't.
-Our custom techniques allow for filtering out attacks with massive PPS rates without causing unnecessary strain on your server’s CPU.
+Our custom techniques allow for filtering out attacks with massive PPS rates without causing unnecessary strain on your server's CPU.
 
 ## ⚙️ **Features**
 - 🛡️ Split-chain system
@@ -43,12 +44,33 @@ sudo apt update && sudo apt purge ufw firewalld -y && sudo apt install nftables 
 - Nftables, for packet filtering
 - Git, to clone the repository
 
-## ⚠️ **Currently known problems/bugs**
-- Rules don't persist across reboots (Caused by an nftables service error).
-#### (I'm working on this problem; Would either need to make a custom service and use it or just make a workaround for the nftables service. This issue is complicated so I cannot solve it quickly + it's not that critical)
-- Overall stability (There were many changes in the past and at the same time the script didn't get tested very well, so there may be weird bugs)
-- Safety (Also, automatic rollback is a bit incomplete and won't roll the rules back if your SSH stops working, which sometimes happens due to unknown reasons. I will implement automatic roll-back with a timer soon, remove ruleset auto-saving probably or make it smarter, and make the automatic rollback better overall)
-#### (Please don't forget to make backups, it's always a good practice. If SSH is your only method to access your server and it's important for you + you don't have backups -> don't even think about installing the script yet, please.)
+## ⚠️ Known issues & limitations
+
+- Rules don't persist after reboot on some systems
+  Caused by an nftables service issue.
+  Most likely this will require either a custom service or a workaround around the existing nftables service.
+  The issue is non-trivial, so it won`t be fixed quickly — fortunately, it’s also not critical.
+
+- Overall stability
+  I didn't write any tests or anything for this project. It isn't profitable either and I got $0 of donations, as of moment of writing this. Sometimes, when I make minor changes and don't test anything to save time, stuff breaks. Thus, there might be some weird issues, although I use it on some of my servers myself with real-world workloads and review people's feedback.
+
+- Safety / rollback reliability
+  Automatic rollback is currently incomplete. In some edge cases, if SSH access breaks, the rules might not rollback correctly. I didn't get enough information about such issues, so if you're able to provide some debug information, you can do this and open an issue - I'll review it and attempt to fix.
+
+- Compatibility with Oracle Cloud instances
+  The script will likely make your network stop working if you'll try to run it on a Oracle Cloud instance. This is caused by the script wiping all the rules before applying its own ones. This cloud provider uses lots of nftables/iptables rules, that's why it happens. It's not clear yet what should be done to work this around.
+
+  Planned improvements:
+  - rollback with a timer
+  - removing or redesigning automatic ruleset saving
+  - generally making rollback behavior more reliable
+
+  Important:
+  Always make backups.
+  If SSH is your only way to access the server, the server is important, and you don't have backups — do not install this script yet.
+
 - iptables-nft compatibility
+  It's basically non-existent.
+
 
 ## ⁉️ <a href="https://github.com/mintyYuki/antiddos/wiki/FAQ">FAQ</a>
