@@ -9,7 +9,6 @@
 <img src="https://img.shields.io/badge/Backend-nftables-0f172a?style=for-the-badge&labelColor=020617" />
 <img src="https://img.shields.io/badge/Protection-L3--L4-0f172a?style=for-the-badge&labelColor=020617" />
 <img src="https://img.shields.io/badge/Filtering-STATEFUL-0f172a?style=for-the-badge&labelColor=020617" />
-<img src="https://img.shields.io/badge/Layer-KERNEL--LEVEL-0f172a?style=for-the-badge&labelColor=020617" />
 <img src="https://img.shields.io/badge/License-AGPL--3.0-0f172a?style=for-the-badge&labelColor=020617" />
 </p>
 
