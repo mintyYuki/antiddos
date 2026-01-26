@@ -1,75 +1,194 @@
+
 <div align="center">
-  <img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/ec419623-4575-4fe9-aa19-a7363201155b"
-       alt="banner"
-       style="width: 8%; height: auto;" />
-    <h1>yuki-antiddos</h1>
+  <img
+    src="https://github.com/user-attachments/assets/ec419623-4575-4fe9-aa19-a7363201155b"
+    alt="banner"
+    width="128"
+  />
+  <h1>yuki-antiddos</h1>
+  <p><b>Minimalist L3–L4 Anti-DDoS powered by nftables</b></p>
 </div>
 
 <p align="center">
-<img src="https://img.shields.io/badge/Backend-nftables-0f172a?style=for-the-badge&labelColor=020617" />
-<img src="https://img.shields.io/badge/Protection-L3--L4-0f172a?style=for-the-badge&labelColor=020617" />
-<img src="https://img.shields.io/badge/Filtering-STATEFUL-0f172a?style=for-the-badge&labelColor=020617" />
-<img src="https://img.shields.io/badge/License-AGPL--3.0-0f172a?style=for-the-badge&labelColor=020617" />
+  <img src="https://img.shields.io/badge/Backend-nftables-0f172a?style=for-the-badge&labelColor=020617" />
+  <img src="https://img.shields.io/badge/Protection-L3--L4-0f172a?style=for-the-badge&labelColor=020617" />
+  <img src="https://img.shields.io/badge/Filtering-STATEFUL-0f172a?style=for-the-badge&labelColor=020617" />
+  <img src="https://img.shields.io/badge/License-AGPL--3.0-0f172a?style=for-the-badge&labelColor=020617" />
 </p>
 
-## ❔ What this is?
-yuki-antiddos is a simple project aimed at mitigating most of the L3-L4 attacks by using just nftables and kernel tweaks. It's made for servers, desktops, laptops (what if you need more security in public networks for your lappy?), and routers (additional configuration is needed in this case, although it should be simple and all you'd need is to add the required rules inside the 20-user.nft file). It's capable of filtering even the most sophisticated attacks at the same time leaving your legitimate traffic untouched and not impacting the overall performance and CPU load. To know how is this possible, continue reading.
+---
 
-## ⏩ **Optimization**
-Most of the ruleset makers forget about optimization; We don't.
-Our custom techniques allow for filtering out attacks with massive PPS rates without causing unnecessary strain on your server's CPU.
+## ❓ What is this?
 
-## ⚙️ **Features**
-- 🛡️ Split-chain system
-- ⛔ Default drop policy
-- 📶 Two-stage UDP stateful rate limiting
-- 🧩 Sysctl-level kernel tuning
+**yuki-antiddos** is a lightweight L3–L4 anti-DDoS ruleset built on top of **nftables** and Linux kernel tuning.
 
-## 📦 **Installation**
-```
-sudo apt update && sudo apt purge ufw firewalld -y && sudo apt install nftables git bc iproute2 -y && git clone https://github.com/mintyYuki/antiddos && cd antiddos && sudo bash antiddos-yuki && cd ..
-```
+It is designed to mitigate **CPU-exhausting network attacks** with:
+- minimal overhead
+- kernel-level filtering
+- no userspace packet processing
 
-## 🧪 **Compatibility**
+This project targets environments where:
+- bandwidth is not the main bottleneck
+- CPU exhaustion is the real problem
+- provider-side DDoS protection is insufficient
 
-| Distribution       | Status                 |
-|--------------------|------------------------|
-| **Ubuntu 24.04+**   | Fully supported and recommended  |
-| **Ubuntu < 24.04**  | Not recommended                  |
-| **Debian 12+**      | Partially supported              |
-| **Other distros**   | Not supported                    |
+Works on:
+- servers
+- desktops & laptops (including hostile public networks)
+- routers (with minor manual adjustments)
 
-## 📋 **Dependencies**
-- Nftables, for packet filtering
-- Git, to clone the repository
+---
+
+## 🧠 Why this exists
+
+This project was born out of necessity.
+
+A production server was targeted with **advanced L3–L4 attacks**.  
+The hosting provider claimed to have DDoS protection — and technically, they did.
+
+However:
+- it only covered attacks that saturated bandwidth
+- it did not protect against attacks designed to **overload CPU**
+- response-heavy traffic was filtered, but silent PPS floods were not
+
+No hosting provider used at the time offered protection against the specific attack patterns being used.
+
+Existing public rulesets:
+- were inefficient
+- caused unnecessary CPU load
+- or failed under real attack conditions
+
+So the decision was made to write a custom ruleset focused specifically on **CPU-bound attack mitigation**.
+
+The result provided full coverage for the observed attack vectors.  
+Since there were no solid ready-made solutions at the time, this project was later shared publicly.
+
+---
+
+## 🧨 Threat model
+
+### What this protects against
+- UDP floods
+- SYN floods
+- Reflection & amplification attacks
+- Spoofed traffic
+- High PPS junk traffic at L3–L4
+
+### What this does NOT protect against
+- L7 / application-layer attacks
+- Slowloris-style attacks
+- Abuse of valid application logic
+- Attacks hidden behind TLS
+- Payload-level inspection attacks
+
+This project intentionally stays at **L3–L4**.  
+For L7 protection, it should be combined with application-level or proxy-based solutions.
+
+---
+
+## ⚡️ Performance philosophy
+
+This ruleset is optimized primarily for **minimal CPU usage** under high packet rates.
+
+Core principles:
+- early packet drops
+- short rule traversal paths
+- avoiding expensive matches in hot chains
+- no heavy logging during attacks
+
+The goal is not to analyze traffic, but to **reject garbage as early and cheaply as possible**.
+
+As a result, the ruleset remains effective under large PPS floods while keeping CPU usage stable.
+
+---
+
+## ⚙️ Features
+
+- 🧬 Split-Chain Architecture
+- 🛑 Drop Policy
+- 📶 Stateful 2-Stage UDP rate limiting
+- 🛡️ Sysctl Hardening
+- 🔄 Easy Updates
+
+---
+
+## 📦 Installation
+
+> ⚠️ This will remove `ufw`, `firewalld`, and their configs.
+
+```bash
+sudo apt update \
+  && sudo apt purge ufw firewalld -y \
+  && sudo apt install nftables git bc iproute2 -y \
+  && git clone https://github.com/mintyYuki/antiddos \
+  && cd antiddos \
+  && sudo bash antiddos-yuki
+````
+
+---
+
+## 🧪 Compatibility
+
+| Distribution       | Status                          |
+| ------------------ | ------------------------------- |
+| **Ubuntu 24.04+**  | ✅ Fully supported, recommended |
+| **Ubuntu < 24.04** | ⚠️ Not recommended              |
+| **Debian 12+**     | 🟡 Partially supported          |
+| **Other distros**  | ❌ Not supported                |
+
+---
+
+## 📋 Dependencies
+
+* **nftables** — packet filtering backend
+* **git** — repository cloning
+* **bc**, **iproute2** — script utilities
+
+---
+
+## 🔄 Updates & maintenance
+
+Updating is straightforward:
+
+* pull the latest changes from Git
+* re-run the installation script
+
+The ruleset is designed to be easily re-applied without restarting the network or the system.
+
+Rollback mechanisms are currently limited.
+Always test updates on non-critical systems first.
+
+---
 
 ## ⚠️ Known issues & limitations
 
-- Rules don't persist after reboot on some systems
-  Caused by an nftables service issue.
-  Most likely this will require either a custom service or a workaround around the existing nftables service.
-  The issue is non-trivial, so it won`t be fixed quickly — fortunately, it’s also not critical.
+### Rules persistence
 
-- Overall stability
-  I didn't write any tests or anything for this project. It isn't profitable either and I got $0 of donations, as of moment of writing this. Sometimes, when I make minor changes and don't test anything to save time, stuff breaks. Thus, there might be some weird issues, although I use it on some of my servers myself with real-world workloads and review people's feedback.
+On some systems, nftables rules may not survive reboot due to service behavior.
+This is not critical but may require a custom workaround.
 
-- Safety / rollback reliability
-  Automatic rollback is currently incomplete. In some edge cases, if SSH access breaks, the rules might not rollback correctly. I didn't get enough information about such issues, so if you're able to provide some debug information, you can do this and open an issue - I'll review it and attempt to fix.
+### Stability
 
-- Compatibility with Oracle Cloud instances
-  The script will likely make your network stop working if you'll try to run it on a Oracle Cloud instance. This is caused by the script wiping all the rules before applying its own ones. This cloud provider uses lots of nftables/iptables rules, that's why it happens. It's not clear yet what should be done to work this around.
+There are no automated tests.
+Most testing happens on real servers under real workloads.
 
-  Planned improvements:
-  - rollback with a timer
-  - removing or redesigning automatic ruleset saving
-  - generally making rollback behavior more reliable
+### Rollback safety
 
-  Important:
-  Always make backups.
-  If SSH is your only way to access the server, the server is important, and you don't have backups — do not install this script yet.
+Automatic rollback is incomplete.
+In rare edge cases, SSH access may break without proper rollback.
 
-- iptables-nft compatibility
-  It's basically non-existent.
+### Oracle Cloud
 
+Oracle Cloud heavily relies on preconfigured iptables rules.
+This script wipes existing rules and may break networking.
+Not supported.
 
-## ⁉️ <a href="https://github.com/mintyYuki/antiddos/wiki/FAQ">FAQ</a>
+### iptables-nft
+
+Not supported.
+
+---
+
+## 📚 FAQ
+
+👉 [https://github.com/mintyYuki/antiddos/wiki/FAQ](https://github.com/mintyYuki/antiddos/wiki/FAQ)
