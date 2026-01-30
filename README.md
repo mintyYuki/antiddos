@@ -49,7 +49,6 @@ The hosting provider claimed to have DDoS protection — and technically, they d
 However:
 - it only covered attacks that saturated bandwidth
 - it did not protect against attacks designed to **overload CPU**
-- response-heavy traffic was filtered, but silent PPS floods were not
 
 No hosting provider used at the time offered protection against the specific attack patterns being used.
 
@@ -81,9 +80,6 @@ Since there were no solid ready-made solutions at the time, this project was lat
 - Attacks hidden behind TLS
 - Payload-level inspection attacks
 
-This project intentionally stays at **L3–L4**.  
-For L7 protection, it should be combined with application-level or proxy-based solutions.
-
 ---
 
 ## ⚡️ Performance philosophy
@@ -94,7 +90,7 @@ Core principles:
 - early packet drops
 - short rule traversal paths
 - avoiding expensive matches in hot chains
-- no heavy logging during attacks
+- no logging at all
 
 The goal is not to analyze traffic, but to **reject garbage as early and cheaply as possible**.
 
