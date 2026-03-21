@@ -18,6 +18,16 @@
 
 ---
 
+## ⚠️ Discontinued
+
+**yuki-antiddos** is no longer maintained.  
+
+- This script has accumulated many bugs and issues.  
+- nftables behaves very differently across systems.  
+- A new, more robust version *might* be developed, but there’s no guarantee.  
+
+This project is kept for reference and historical purposes only.
+
 ## ❓ What is this?
 
 **yuki-antiddos** is a lightweight L3–L4 anti-DDoS ruleset built on top of **nftables** and Linux kernel tuning.
