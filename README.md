@@ -16,17 +16,18 @@
   <img src="https://img.shields.io/badge/License-AGPL--3.0-0f172a?style=for-the-badge&labelColor=020617" />
 </p>
 
----
+## ⚠️ !!! Discontinued
 
-## ⚠️ Discontinued
+**yuki-antiddos** is no longer maintained.
 
-**yuki-antiddos** is no longer maintained.  
+* This script had its time, but it's old and buggy
+* nftables behaves differently across systems, which made things tricky
+* **But don’t worry!** A shiny new project has arrived: **yukiwall** ([github.com/mintyYuki/yukiwall](https://github.com/mintyYuki/yukiwall)) ✨
 
-- This script has accumulated many bugs and issues.  
-- nftables behaves very differently across systems.  
-- A new, more robust version *might* be developed, but there’s no guarantee.  
+yukiwall is super fresh, works perfectly, minimal bugs, and is slowly taking over. Everything's neat, clean, and modern - basically the upgrade you've been waiting for! <3
 
-This project is kept for reference and historical purposes only.
+This project is kept only for reference and historical purposes 🌸
+
 
 ## ❓ What is this?
 
